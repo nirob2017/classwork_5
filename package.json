@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/nirob2017/classwork_5#readme",
   "dependencies": {
-    "body-parser": "^1.18.3"
+    "body-parser": "^1.18.3",
+    "mongoose": "^5.2.5"
   }
 }
