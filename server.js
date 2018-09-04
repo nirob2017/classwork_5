@@ -56,26 +56,7 @@ app.get('/about',function(req,res){
   
   mongoose.connect('mongodb://' + process.env.IP +':27017/test');
  
-  
-/*var db, uri = "mongodb://" + process.env.IP + "/test";*/
-   
-/*  mongo.MongoClient.connect(uri,{userNewUrlParser:true},function(err,client){
-    if(err){console.log("Could not connect to MongoDB")
-    }
-    else {
-      db = client.db('simplenode');
-      console.log("Database Created")
-    }
-  });*/
-   
-/*  var save = function(form_data){
-    db.createCollection('users',function(err,collection){ if (err) throw err;});
-    var collection = db.collection('users');
-    form_data.age=12;
-    collection.save(form_data);
-    
-  }
-  */
+
  var server = http.Server(app);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended:true}));

@@ -19,6 +19,8 @@
   "homepage": "https://github.com/nirob2017/classwork_5#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "mongoose": "^5.2.5"
+    "expressjs": "^1.0.1",
+    "mongoose": "^5.2.5",
+    "nodemon": "^1.18.4"
   }
 }
