@@ -126,9 +126,7 @@ In the variables package we have all the variables files. All the Resource Ids, 
 For example,  we declared variables as follows:
  ```Java
 protected static String navContentTextHome = "Home";
-
 protected static int chatShortcutID= R.id.chat_shortcut;
-
 protected static String deviceShareTitleID = "android:id/title";
  ```
 
