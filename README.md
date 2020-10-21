@@ -47,7 +47,7 @@ We are taking parameters as Resource Id of an element or object. Here we are che
 Also we used polymorphism techniques in the methods. Some methods have the same name with different parameters.
 
 
-## commonValidationFlows
+## commonFlows
 
 In the commonFlows we have CommonValidationFlows.java & CommonActionFlows.java files.
 
