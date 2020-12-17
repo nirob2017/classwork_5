@@ -1,4 +1,3 @@
-# espresso_automation
 # Documentation on Automation Testing Structures in Kotlin Language 
  
 ## The features that used in this kotlin testing structures
@@ -123,7 +122,7 @@ For example: Clicking ```Log your meals``` Card
             } catch (e: NoMatchingViewException) {
             goToMealLoggingTaskAfterLoggedMeal()
             mealLoggingScreen()
-            }
+        }
     }
 ```
  
