@@ -1,13 +1,33 @@
 # espresso_automation
 # Documentation on Automation Testing Structures in Kotlin Language 
  
-##The features that used in this kotlin testing structures
+## The features that used in this kotlin testing structures
 * We didn't throw any Exception in any class or methods, in java which were mandatory to declare. For i.e
-```kotlin fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)```
+```kotlin
+fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)
+```
 For every ui automator test we had to throw ```UiObjectNotFoundException``` in java. But here we don't need to check the exception.
 
-* All the methods, variables are declared in Companion object for using these as static type like java.
-* All the variables we declared as val, in java we had to declare variable type.
+* All the methods, variables are declared in Companion object for using these as static type in other classes like java. for i.e
+```kotlin
+class Action {
+    companion object {
+        private val Device: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        private val scrollTo = UiScrollable(UiSelector().scrollable(true))
+
+        fun clickElement(resourceId: Int) = onView(withId(resourceId)).perform(click())
+    }
+}
+```
+We can access the method ```clickElement``` in the other classes without creating instances of ```Action``` class.
+ 
+* All the variables we declared as val, in java we had to declare variable type. For i.e
+```kotlin
+    internal const val addMoreItems: String = "Add more items"
+    internal const val foodItemSearchBox: Int = R.id.food_logging_search_search_box
+```
+Though here we declared the type explicitly for understanding which is which, because we are using both espresso & uiautomator testing tools for test cases.
+
 * We used in-line/block methods in some cases for eliminating runtime overhead or memory overhead.
 * In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration.
 * For using variables in the tests we imported the variables as we imported the methods from different classes's.       
