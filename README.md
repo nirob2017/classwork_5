@@ -28,11 +28,24 @@ We can access the method ```clickElement``` in the other classes without creatin
 ```
 Though here we declared the type explicitly for understanding which is which, because we are using both espresso & uiautomator testing tools for test cases.
 
-* We used in-line/block methods in some cases for eliminating runtime overhead or memory overhead.
+* We used in-line/block methods in some cases for eliminating runtime overhead or memory overhead. For examples:
+```kotlin
+fun clickElement(text: String) = onView(withText(text)).perform(click())
+```
+We used this functionality in many other classes & in files, which also reduces the boilerplate of codes.
+
 * In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration.
-* For using variables in the tests we imported the variables as we imported the methods from different classes's.       
+```kotlin
+import com.wsl.noom.baseTest.Validate.Companion.checkAssertion
+```
+For using this method we have to write code like this one ```checkAssertion(availableCalorieID)```.
  
-Under the com.wsl.noom folder we have now four sub packages and one java file as follows:
+* For using variables in the tests we imported the variables as we imported the methods from different classes's. For i.e
+```kotlin
+import com.wsl.noom.variables.CommonVariables.Companion.availableCalorieID
+```       
+ 
+Under the com.wsl.noom folder we have now four sub packages and one kotlin file as follows:
  
  * baseTest
  * commonFlows
