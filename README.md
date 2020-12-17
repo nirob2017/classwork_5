@@ -34,7 +34,7 @@ fun clickElement(text: String) = onView(withText(text)).perform(click())
 ```
 We used this functionality in many other classes & in files, which also reduces the boilerplate of codes.
 
-* In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration.
+* In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration rather than importing the whole class.
 ```kotlin
 import com.wsl.noom.baseTest.Validate.Companion.checkAssertion
 ```
@@ -44,7 +44,7 @@ For using this method we have to write code like this one ```checkAssertion(avai
 ```kotlin
 import com.wsl.noom.variables.CommonVariables.Companion.availableCalorieID
 ```       
- 
+## Project Structure 
 Under the com.wsl.noom folder we have now four sub packages and one kotlin file as follows:
  
  * baseTest
