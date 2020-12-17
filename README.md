@@ -1,6 +1,13 @@
 # espresso_automation
 # Documentation on Automation Testing Structures in Kotlin Language 
  
+The features that used in this kotlin testing structures
+* We didn't throw any Exception in any class or methods, in java which were mandatory to declare.
+* All the methods, variables are declared in Companion object for using these as static type like java.
+* All the variables we declared as val, in java we had to declare variable type.
+* We used in-line/block methods in some cases for eliminating runtime overhead or memory overhead.
+* In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration.
+* For using variables in the tests we imported the variables as we imported the methods from different classes's.       
  
 Under the com.wsl.noom folder we have now four sub packages and one java file as follows:
  
@@ -12,7 +19,7 @@ Under the com.wsl.noom folder we have now four sub packages and one java file as
  
 ## baseTest
  
-In the baseTest we have Action.java & Validate.java files.
+In the baseTest we have ```Action.kt``` & ```Validate.kt``` files.
  
 #### Validate.kt
  
@@ -106,7 +113,7 @@ In some tests we have to verify or calculate some values which are shown as text
  
 ## tests
  
-In the tests package we have all the test files. In every test file’s beginning we launch the app. In methods we wrote all the assertions or actions of the UI for the test.
+In the tests package we have all the test files in different packages for different users. Each test is in specific package which consists of a test file & a variable file. In every test file’s beginning we launch the app. In methods we wrote all the assertions or actions of the UI for the test.
  
 For example, In ```login.kt``` test file:
 ```kotlin
@@ -128,7 +135,7 @@ For example, we declared variables as follows in class:
             internal const val loginButtonID: Int = R.id.btn_login
             internal const val loginWithEmailButtonID: Int = R.id.btn_email_login
             internal const val trackingManuallyButton: Int = R.id.simple_dialog_negative_button
-            }
+        }
     }
 ```
  
