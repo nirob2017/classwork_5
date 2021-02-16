@@ -1,4 +1,4 @@
-# Documentation on New Automation Testing Structures of Kotlin Language 
+# Documentation on New Automation Testing Structures in Kotlin Language 
    
 ## Project Structure 
 Under the ```com.wsl.noom package``` we have now five sub packages and test suites files as follows:
