@@ -1,47 +1,5 @@
-# Documentation on Automation Testing Structures in Kotlin Language 
- 
-## The features that used in this kotlin testing structures in summary
-* We didn't throw any Exception in any class or methods, in java which were mandatory to declare. For i.e
-```kotlin
-fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)
-```
-For every ui automator test we had to throw ```UiObjectNotFoundException``` in java. But here we don't need to check the exception.
-
-* All the methods, variables are declared in Companion object for using these as static type in other classes like java. for i.e
-```kotlin
-class Action {
-    companion object {
-        private val Device: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        private val scrollTo = UiScrollable(UiSelector().scrollable(true))
-        fun clickElement(resourceId: Int) = onView(withId(resourceId)).perform(click())
-    }
-}
-```
-We can access the method ```clickElement``` in the other classes without creating instances of ```Action``` class.
- 
-* All the variables we declared as val, in java we had to declare variable type. For i.e
-```kotlin
-    internal const val addMoreItems: String = "Add more items"
-    internal const val foodItemSearchBox: Int = R.id.food_logging_search_search_box
-```
-Though here we declared the type explicitly for understanding which is which, because we are using both espresso & uiautomator testing tools for test cases.
-
-* We used in-line/block methods in some cases for eliminating runtime overhead or memory overhead. For examples:
-```kotlin
-fun clickElement(text: String) = onView(withText(text)).perform(click())
-```
-We used this functionality in many other classes & in files, which also reduces the boilerplate of codes.
-
-* In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration rather than importing the whole class.
-```kotlin
-import com.wsl.noom.baseTest.Validate.Companion.checkAssertion
-```
-For using this method we have to write code like this one ```checkAssertion(availableCalorieID)```.
- 
-* For using variables in the tests we imported the variables as we imported the methods from different classes's. For i.e
-```kotlin
-import com.wsl.noom.variables.CommonVariables.Companion.availableCalorieID
-```       
+# Documentation on New Automation Testing Structures of Kotlin Language 
+   
 ## Project Structure 
 Under the com.wsl.noom package we have now five sub packages and  test suites files as follows:
  
@@ -67,13 +25,13 @@ In the baseTest we have ```Action.kt``` & ```Validate.kt``` files.
  For example: We have to check an element in the view is exist or not for that we are using method like,
  
 ```Kotlin
-    fun checkAssertion(resourceId: Int) {
-        try {
-            onView(withId(resourceId)).check(matches(withId(resourceId)))
-            } catch (e: NoMatchingViewException) {
-            onView(withId(resourceId)).check(doesNotExist())
-            }
-        }
+fun checkAssertion(resourceId: Int) {
+    try {
+         onView(withId(resourceId)).check(matches(withId(resourceId)))
+    } catch (e: NoMatchingViewException) {
+         onView(withId(resourceId)).check(doesNotExist())
+    }
+}
 ```
  
 #### Action.kt
@@ -103,7 +61,7 @@ fun mealLoggingOverviewScreen(breakfast: String, lunch: String, dinner: String) 
     checkAssertion(dinner)
     checkAssertion(analysisButtonId)
     checkAssertion(finishDayButtonId)
-  }
+}
 ```
 In every food logging tests we have to assert meal logging overview screen rather than writing same codes in every tests we put these codes in this ```mealLoggingOverviewScreen()``` method for reusing in the food logging tests & reducing the boilerplate of codes.
 
@@ -151,20 +109,32 @@ fun validatingCalorieBudgetAfterLoggingAMeal(caloriesRemainingBeforeLoggingMeal:
     val calorieOfAnItem: Int = textToInt(calorieOfAnItemText)
     val remainingCalorie: Int = updatedCalorieBudget - calorieOfAnItem
     return remainingCalorie == caloriesRemainingBeforeLoggingMeal
-  }
+}
 ```
  
 ## baseTests
  
-In the tests package we have all the test files in different packages for different users. Each test is in specific package which consists of a test file & a variable file. In every test file’s beginning we launch the app. In methods we wrote all the assertions or actions of the UI for the test.
+In the tests package we have all the tests files in different packages like Login Test in Login package. Each test is in specific package which consists of a test file & a variable file. In methods we wrote all the assertions/actions as we can resuse the code for different language users. As before we wrote same test files & codes in other packages for different user. Now we only create assertions/actions & test file only one time for all users.  
  
-For example, In ```login.kt``` test file:
+For example, In ```skipMealTest.kt``` test file:
 ```kotlin
-   checkAssertion(trackingManuallyButton, 40000)
-   clickElement(trackingManuallyButton)
+fun skipMealTest(language: String) {
+    goToMealLoggingTaskAndMealOverviewScreen(language)
+    when (language) {
+        "En" -> commonTasksOfSkipAMealTest(dinnerRowTitle, doneButton)
+        "Es" -> commonTasksOfSkipAMealTest(esDinnerRowTitle, esDoneButton)
+        "De" -> commonTasksOfSkipAMealTest(deDinnerRowTitle, deDoneButton)
+    }
+}
+
+private fun commonTasksOfSkipAMealTest(mealTitle: String, doneButton: String) {
+   clickElement(mealTitle)
+   checkAssertion(mealTitle)
+   checkingItemSearchingScreen(doneButton)
+   checkingMealSkippedAndSkippingMeal(doneButton)
+}
 ```
-By using ```checkAssertion(trackingManuallyButton, 40000)``` we are waiting for 40 seconds in the test for the Tracking manually button to load in the view and checking the assertion of that button. In the next line we are clicking that button from ```Action.kt``` file’s method. trackingManuallyButton is a variable which is declared in ```CommonVariables.kt``` file in ```LoginSignUpCommonVars``` class as an integer.
- 
+Here we are using ```skipMealTest(language: String)``` method for Testing Skipping Meal Test for different language user, just passing parameter as language identifier like "En" from different user's test suites but using same codes. ```goToMealLoggingTaskAndMealOverviewScreen(language)``` is a method of ```CommonFoodLoggingFlows.kt``` file, in this method we are also sending language parameter so it'll work as language based & with ```when()``` functionality we're checking which language then calling the ``` commonTasksOfSkipAMealTest(mealTitle: String, doneButton: String)``` method, In parameter we are using variables based on language. 
  
 ## variables
  
@@ -172,16 +142,153 @@ In the variables package we a CommonVariables.kt file which consist of multiple 
  
 For example, we declared variables as follows in class:
 ```kotlin
-    class LoginSignUpCommonVars {
-        companion object {
-            internal const val passwordTyped: String = "test123"
-            internal const val loginButtonID: Int = R.id.btn_login
-            internal const val loginWithEmailButtonID: Int = R.id.btn_email_login
-            internal const val trackingManuallyButton: Int = R.id.simple_dialog_negative_button
-        }
+class LoginSignUpCommonVars {
+    companion object {
+        internal const val loginButtonID: Int = R.id.btn_login
+        internal const val loginWithEmailButtonID: Int = R.id.btn_email_login
+        internal const val trackingManuallyButton: Int = R.id.simple_dialog_negative_button
     }
+}
 ```
  
-## MainActivityTest
+### DayOneUserTestSuite.kt
  
-Here we run all the test files which are all located in the tests package as instrumentation tests.
+All the tests of newly created user's are declared here, language is set to English. 
+
+### ExistingUserTestSuite.kt
+ 
+All the tests of Existing user's are declared here, language is set to English. 
+
+### GermanUserTestSuite.kt
+ 
+All the tests of German language user's are declared here, language is set to German. 
+
+### PreDPDUserTestSuite.kt
+ 
+All the tests of PreDPD user's are declared here, language is set to English. 
+
+### SpanishUserTestSuite.kt
+ 
+All the tests of Spanish language user's are declared here, language is set to Spanish. 
+
+### WinBackUserUserTestSuite.kt
+ 
+All the tests of newly Win Back user's are declared here, language is set to English. 
+
+
+## The features that used in this kotlin testing structures in summary
+* We didn't throw any Exception in any class or methods, in java which were mandatory to declare. For i.e
+```kotlin
+fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)
+```
+For every ui automator test we had to throw ```UiObjectNotFoundException``` in java. But here we don't need to check the exception.
+
+* All the methods, variables are declared in Companion object for using these as static type in other classes like java. for i.e
+```kotlin
+class Action {
+    companion object {
+        private val Device: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        private val scrollTo = UiScrollable(UiSelector().scrollable(true))
+        fun clickElement(resourceId: Int) = onView(withId(resourceId)).perform(click())
+    }
+}
+```
+We can access the method ```clickElement``` in the other classes without creating instances of ```Action``` class.
+ 
+* All the variables we declared as val, in java we had to declare variable type. For i.e
+```kotlin
+    internal const val addMoreItems: String = "Add more items"
+    internal const val foodItemSearchBox: Int = R.id.food_logging_search_search_box
+```
+Though here we declared the type explicitly for understanding which is which, because we are using both espresso & uiautomator testing tools for test cases.
+
+* We used in-line/block methods in some cases for eliminating runtime overhead or memory overhead. For examples:
+```kotlin
+fun clickElement(text: String) = onView(withText(text)).perform(click())
+```
+We used this functionality in many other classes & in files, which also reduces the boilerplate of codes.
+
+* In every file we call other classes's method by importing the classes's specific method as companion object at top level declaration rather than importing the whole class.
+```kotlin
+import com.wsl.noom.baseTest.Validate.Companion.checkAssertion
+```
+For using this method we have to write code like this one ```checkAssertion(availableCalorieID)```.
+ 
+* For using variables in the tests we imported the variables as we imported the methods from different classes's. For i.e
+```kotlin
+import com.wsl.noom.variables.CommonVariables.Companion.availableCalorieID
+```
+
+## TestRails Integration
+
+In ```com.wsl.noom.helpers``` we've created a package as ```TestRails```. This package has the following files:
+
+* TestRail.kt
+* TestRailsAPIClient.kt
+* TestRailsAPIException.kt
+* TestRailsHelper.kt
+* TestResult.kt
+
+#### Dependency
+In gradle file below lines in ```dependecies``` section because TestRails API has external depency on json-simple:
+
+```implementation 'com.googlecode.json-simple:json-simple:1.1.1'```
+
+We added below lines before ```dependecies``` section bcause it'll solve the error of ```Duplicate file found of org.hacrest:hamcrest-core:1.1```
+```
+configurations.all {
+   	resolutionStrategy.dependencySubstitution {
+       	substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+   	}
+}
+
+```        
+#### TestRail.kt
+
+This is a custom annotation class file, later we'll use this before every ```@Test``` annotation as ```@TestRail(id = "")``` for specify particular tests for reporting test status to test rail & assosiationg tests with test cases of TestRail. For i.e
+
+```kotlin
+@TestRail(id = "1")
+@Test
+fun login() = loginTest()
+```
+
+#### TestRailsAPIClient.kt & TestRailsAPIException.kt
+
+These two files are downloaded from TestRail [website](https://www.gurock.com/testrail/docs/api/getting-started/binding-java). These were java file, we converted them to kotlin file. Functionalty of ```TestRailsAPIClient.kt``` to send GET/POST request to TestRail API. TestRail's GET requests are used by read-only API methods and can be used to read or query data from TestRail & TestRail's POST requests are used by write-based API methods and can be used to add or modify data. ```TestRailsAPIException.kt``` is used for catch error message of API calls & throwing them. 
+
+#### TestRailsHelper.kt
+
+First we declared TestRail's website, user, password in ```createSuite()``` method with instance of TestRailsAPIClient class. In ```TestRailsHelper.kt``` file, ```createSuite()``` method is for creating a connection with TestRail website using POST request of TestRailsAPIClient class & add a new run for Testrail project. ```beforeTest()``` method is for getting test methods name & update case id for Testrail which method has case id with the TestRail id.
+```hasAnnotations()``` is a boolean method to identify which test method is associated with @TestRail annotation.
+
+#### TestResult.kt
+
+This file is for update the test status & after finishing a test & sending result to TestRail via Testrail's API. This class is inherited from TestWatcher class. This class override three methods of TestWatcher's class. ```succeded() failed()```methods are for updating status id of each test cases for TestRail. ```finished()``` method gets called when the test finishes, we're sending test result to TestRail in this method using POST request of TestRailsAPIClient class.
+
+#### Test Suite
+
+In test suite we've added these lines for complete the TestRail Integration:
+
+```kotlin
+class TestSuite {
+    companion object {
+        @Rule @JvmField var testNames: TestName = TestName()
+        @BeforeClass @JvmStatic fun createSuites() = createSuite()
+        @Rule @JvmField var activityTestRule =
+                ActivityTestRule(NoomLaunchActivity::class.java)
+    }
+
+    @Before fun beforeTests() = beforeTest()
+
+    @Rule @JvmField var watchman: TestRule = TestResult()
+
+    @TestRail(id = "1")
+    @Test
+    fun login() = loginTest()
+}
+```    
+In companion object first ```@Rule``` declared a TestName class's instances to run the class & get all the test methods name of the Test Suite. With ```@BeforeClass``` we run the TestRailsHelper class's ```createSuite()``` method for established a connection with testrail & create a run in Testrail before running any tests. Second @Rule we launch the app. In ```@Before``` we run TestRailsHelper class's ```beforeTest()``` method for updating case id from which methods are specified with Testrail id.
+In third ```@Rule``` we run TestResults script as TestRule object for updating test status & sending the result to Testrail api for updating in the run.
+
+
