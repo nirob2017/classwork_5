@@ -1,7 +1,7 @@
 # Documentation on New Automation Testing Structures of Kotlin Language 
    
 ## Project Structure 
-Under the com.wsl.noom package we have now five sub packages and  test suites files as follows:
+Under the ```com.wsl.noom package``` we have now five sub packages and test suites files as follows:
  
  * baseTestAVI
  * baseTests
@@ -138,7 +138,7 @@ Here we are using ```skipMealTest(language: String)``` method for Testing Skippi
  
 ## variables
  
-In the variables package we a CommonVariables.kt file which consist of multiple classes, within those classes we put common variables for specific tests files. All the Resource Ids, Texts, Xpaths, String Resource Ids are declared here in the files, Which are declared in companion object.
+In the variables package we a ```CommonVariables.kt``` file which consist of multiple classes, within those classes we put common variables for specific tests files. All the Resource Ids, Texts, Xpaths, String Resource Ids are declared here in the files, Which are declared in companion object.
  
 For example, we declared variables as follows in class:
 ```kotlin
@@ -176,7 +176,7 @@ All the tests of Spanish language user's are declared here, language is set to S
 All the tests of newly Win Back user's are declared here, language is set to English. 
 
 
-## The features that used in this kotlin testing structures in summary
+## The features of kotlin that used in this testing structures are in summary
 * We didn't throw any Exception in any class or methods, in java which were mandatory to declare. For i.e
 ```kotlin
 fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)
@@ -239,7 +239,7 @@ We added below lines before ```dependecies``` section bcause it'll solve the err
 configurations.all {
    	resolutionStrategy.dependencySubstitution {
        	substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
-   	}
+   }
 }
 
 ```        
@@ -264,7 +264,7 @@ First we declared TestRail's website, user, password in ```createSuite()``` meth
 
 #### TestResult.kt
 
-This file is for update the test status & after finishing a test & sending result to TestRail via Testrail's API. This class is inherited from TestWatcher class. This class override three methods of TestWatcher's class. ```succeded() failed()```methods are for updating status id of each test cases for TestRail. ```finished()``` method gets called when the test finishes, we're sending test result to TestRail in this method using POST request of TestRailsAPIClient class.
+This file is for update the test status & after finishing a test & sending result to TestRail via Testrail's API. This class is inherited from TestWatcher class. This class override three methods of TestWatcher's class. ```succeded(), failed()```methods are for updating status id of each test cases for TestRail. ```finished()``` method gets called when the test finishes, we're sending test result to TestRail in this method using POST request of TestRailsAPIClient class.
 
 #### Test Suite
 
@@ -288,7 +288,17 @@ class TestSuite {
     fun login() = loginTest()
 }
 ```    
-In companion object first ```@Rule``` declared a TestName class's instances to run the class & get all the test methods name of the Test Suite. With ```@BeforeClass``` we run the TestRailsHelper class's ```createSuite()``` method for established a connection with testrail & create a run in Testrail before running any tests. Second @Rule we launch the app. In ```@Before``` we run TestRailsHelper class's ```beforeTest()``` method for updating case id from which methods are specified with Testrail id.
+In companion object first ```@Rule``` declared a TestName class's instances to run the class & get all the test methods name of the Test Suite. With ```@BeforeClass``` we run the TestRailsHelper class's ```createSuite()``` method for established a connection with testrail & create a run in Testrail before running any tests. Second ```@Rule``` we launch the app. In ```@Before``` we run TestRailsHelper class's ```beforeTest()``` method for updating case id from which methods are specified with Testrail id.
 In third ```@Rule``` we run TestResults script as TestRule object for updating test status & sending the result to Testrail api for updating in the run.
 
 
+## Specify TestSuite in Bitrise
+
+For running a specific test suite in Bitrise: In ```[BETA]Virtual Device Testing for Android``` task of workflows, we have to set class name in Test targets of Instrumentation Test section. For i.e we want to run ```SpanishUserTestSuite.kt``` we've to write code in the Test targets field as it is:
+```
+class com.wsl.noom.SpanishUserTestSuite
+```
+For running multiple test suites in One build in Bitrise:  In ```[BETA]Virtual Device Testing for Android``` task of workflows, we have to set class names in Test targets of Instrumentation Test section. For i.e we want to run ```SpanishUserTestSuite.kt``` & ```GermanUserTestSuite.kt``` we've to write code in the Test targets field as it is:
+```
+class com.wsl.noom.SpanishUserTestSuite, class com.wsl.noom.GermanUserTestSuite
+```
