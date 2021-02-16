@@ -176,7 +176,7 @@ All the tests of Spanish language user's are declared here, language is set to S
 All the tests of newly Win Back user's are declared here, language is set to English. 
 
 
-## The features of kotlin that used in this testing structures are in summary
+## The features of kotlin used in this testing structures are in summary
 * We didn't throw any Exception in any class or methods, in java which were mandatory to declare. For i.e
 ```kotlin
 fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)
