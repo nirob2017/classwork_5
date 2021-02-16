@@ -1,6 +1,6 @@
 # Documentation on Automation Testing Structures in Kotlin Language 
  
-## The features that used in this kotlin testing structures
+## The features that used in this kotlin testing structures in summary
 * We didn't throw any Exception in any class or methods, in java which were mandatory to declare. For i.e
 ```kotlin
 fun pressDeviceBackButton() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK)
@@ -13,7 +13,6 @@ class Action {
     companion object {
         private val Device: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         private val scrollTo = UiScrollable(UiSelector().scrollable(true))
-
         fun clickElement(resourceId: Int) = onView(withId(resourceId)).perform(click())
     }
 }
@@ -44,15 +43,21 @@ For using this method we have to write code like this one ```checkAssertion(avai
 import com.wsl.noom.variables.CommonVariables.Companion.availableCalorieID
 ```       
 ## Project Structure 
-Under the com.wsl.noom folder we have now four sub packages and one kotlin file as follows:
+Under the com.wsl.noom package we have now five sub packages and  test suites files as follows:
  
- * baseTest
+ * baseTestAVI
+ * baseTests
  * commonFlows
- * tests
+ * helpers
  * variables
- * MainActivityTest.kt
+ * DayOneUserTestSuite.kt
+ * ExistingUserTestSuite.kt
+ * GermanUserTestSuite.kt
+ * PreDPDUserTestSuite.kt
+ * SpanishUserTestSuite.kt
+ * WinBackUserUserTestSuite.kt
  
-## baseTest
+## baseTestAVI
  
 In the baseTest we have ```Action.kt``` & ```Validate.kt``` files.
  
@@ -88,65 +93,68 @@ Also we used polymorphism techniques in the methods. Some methods have the same 
  
 ## commonFlows
  
-In the commonFlows we have ```CommonValidationFlows.kt``` & ```CommonActionFlows.kt``` files.
- 
-#### CommonValidationFlows.kt
- 
-In the commonValidationFlows.java file we had some String & Integer variables. In some tests we have some common assertions or validations of some elements or objects. For that we have written some methods in this file so we can use these same methods in the different tests.
- 
-For example: Checking assertions of Meal Titles in “Log your meals Card”. 
- 
+In the commonFlows we have some common flows packages like ```commonFoodLoggingFlows, CommonValidationFlows``` etc. In each of every common flows package consists of two files like ```commonFoodLoggingFlows.kt & commonFoodLoggingFlowsVars.kt``` in ```commonFoodLoggingFlows``` package. ```commonFoodLoggingFlows.kt``` has some common methods that are being used in food logging tests for i.e 
+
 ```kotlin
-    fun mealLoggingScreen() {
-        checkAssertion(breakfastRowTitle)
-        checkAssertion(lunchRowTitle)
-        checkAssertion(dinnerRowTitle)
-        checkAssertion(analysisButton)
-        checkAssertion(finishDayButton)
-    }
+fun mealLoggingOverviewScreen(breakfast: String, lunch: String, dinner: String) {
+    checkAssertion(dateId)
+    checkAssertion(breakfast)
+    checkAssertion(lunch)
+    checkAssertion(dinner)
+    checkAssertion(analysisButtonId)
+    checkAssertion(finishDayButtonId)
+  }
 ```
-We have some tests where we have to check the meal titles everytime we test. We are using the checkAssertion() method of the validation file. We are using parameters Strings which are imported from ```variables\CommonVariables.kt``` as companion object.
-```kotlin
-import com.wsl.noom.variables.CommonVariables.Companion.FoodLoggingCommonVars.Companion.breakfastRowTitle
-```
-#### CommonActionFlows.kt
- 
-In the ```commonActionFlows.kt``` file we had some String & Integer variables. In some tests we have some common actions or tasks to do. For that we have written some methods in this file so we can use these same methods in the different tests.
- 
-For example: Clicking ```Log your meals``` Card 
-```kotlin
-    fun goToMealLoggingTask() {
-        try {
-            goToMealLoggingTaskBeforeMealLogged()
-            mealLoggingScreen()
-            } catch (e: NoMatchingViewException) {
-            goToMealLoggingTaskAfterLoggedMeal()
-            mealLoggingScreen()
-        }
-    }
-```
- 
-We have some tests where we have to click the meal task card everytime we test. In this method we are using Ui Automator to scroll to the specific view, then we are clicking the element using the clickElement method of ```Action.kt file```. We are using parameters Strings which are declared in this file as i.e 
-```kotlin
-private const val mealLoggingTaskName: String = "Log your meals"
-```
+In every food logging tests we have to assert meal logging overview screen rather than writing same codes in every tests we put these codes in this ```mealLoggingOverviewScreen()``` method for reusing in the food logging tests & reducing the boilerplate of codes.
+
+```commonFoodLoggingFlowsVars.kt``` has variables which are only used in ```commonFoodLoggingFlows.kt``` file.
  
 ## helpers
  
-In the helpers we have ```ElapsedTimeIdlingResource.kt``` & ```VerifyingElement.kt``` files.
+In the helpers we have ```TestRails``` package and helper files as follows:
+
+ * TestRails
+ * APIMethods.kt
+ * ChangeDateTime.kt
+ * ElapsedTimeIdlingResources.kt
+ * TryCatch.kt
+ * VerifyingElement.kt
  
+#### TestRails
+
+TestRails package has classes, files which are for intregating with tests with TestRails like connecting with TestRails API, Connecting to TestRails website, sending test results, getting test results and other stuffs. Details are in TestRails Integration section. 
+
 In this package we store all our helper methods like waiting for a view, extracting text from an element using resource ID, extracting integer from a text etc.
  
-For example: Converting a text into Integer.
+#### APIMethods.kt 
+
+In ```APIMethods.kt``` file we put all of our API methods for sending GET/POST request to Noom's various server. For i.e getting UPID from Noom Server.
+
+#### ChangeDateTime.kt
+
+ChangeDateTime class is for changing the device date/time using UiAutomator. Here we launch the device's Date Settings option from Settings using Application Context & Intent, enable manual date/time then change date/time using UiAutomator as desired. In ChangeDateTime class we have implemented some methods like ```openDateSettings(),deviceNextDay(), getCurrentDeviceDate(), selectTargetDay(), selectTargetMonth()``` & other method for changing device's date time.
+
+#### ElapsedTimeIdlingResources.kt
+
+This class is used in ```Validate.kt``` file to waiting for a view/element. This class is implemented on IdlingResource class of Espresso's library, it wait for a view/element for specific given time, register the element for IdlingResource and check for element is idle or not, when it's idle unregister the element.   
+
+#### TryCatch.kt
+
+Here we put all of our try/catch block codes that are used in tests for tracking how many try/catch block we are using in the tests.
+
+#### VerifyingElement.kt
+
+In some tests we have to verify or calculate some values which are shown as text or UI elemnt. For example: Validating Calorie budget.
+
 ```kotlin
-    private fun textToInt(Text: String): Int {
-        val calorieTextToInt = Text.replace("[^0-9]".toRegex(), "")
-        return calorieTextToInt.toInt()
-    }
+fun validatingCalorieBudgetAfterLoggingAMeal(caloriesRemainingBeforeLoggingMeal: Int, calorieOfAnItemText: String, updatedCalorieBudget: Int): Boolean {
+    val calorieOfAnItem: Int = textToInt(calorieOfAnItemText)
+    val remainingCalorie: Int = updatedCalorieBudget - calorieOfAnItem
+    return remainingCalorie == caloriesRemainingBeforeLoggingMeal
+  }
 ```
-In some tests we have to verify or calculate some values which are shown as text. We extract the texts from the element then convert the text into integers using the above method for later calculation. In the TextToInt() method we are taking parameters as String converting it to integer using java native methods.
  
-## tests
+## baseTests
  
 In the tests package we have all the test files in different packages for different users. Each test is in specific package which consists of a test file & a variable file. In every test file’s beginning we launch the app. In methods we wrote all the assertions or actions of the UI for the test.
  
