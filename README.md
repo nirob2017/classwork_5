@@ -298,7 +298,7 @@ For running a specific test suite in Bitrise: In ```[BETA]Virtual Device Testing
 ```
 class com.wsl.noom.SpanishUserTestSuite
 ```
-For running multiple test suites in One build in Bitrise:  In ```[BETA]Virtual Device Testing for Android``` task of workflows, we have to set class names in Test targets of Instrumentation Test section. For I.e we want to run ```SpanishUserTestSuite.kt``` & ```GermanUserTestSuite.kt``` we've to write code in the Test targets field as it is:
+For running multiple test suites in One build in Bitrise: In ```[BETA]Virtual Device Testing for Android``` task of workflows, we have to set class names in Test targets of Instrumentation Test section. For I.e we want to run ```SpanishUserTestSuite.kt``` & ```GermanUserTestSuite.kt``` we've to write code in the Test targets field as it is:
 ```
 class com.wsl.noom.SpanishUserTestSuite, class com.wsl.noom.GermanUserTestSuite
 ```
